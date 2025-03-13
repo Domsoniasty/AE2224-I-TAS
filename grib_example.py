@@ -15,6 +15,6 @@ var_points_filtered = ds.variables['w'][:].data[0, 0, 0]  # [a, b, c] are indice
 time = ds.variables['valid_time'][:].data  # [s]
 time = (time - time[0]) / 3600  # normalise to t=0 at the first point, convert to hrs
 
-print(var_points_filtered)
+# use pandas to present data as a table (difficult to extract data though)
 df = ds['w'].to_dataframe()
 print(df)
