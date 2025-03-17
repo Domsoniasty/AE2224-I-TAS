@@ -6,6 +6,15 @@ from functions import get_potential_temp
 ds = xr.open_dataset("gemini-testdata.grib", engine="cfgrib")
 
 def h_inversion(ds, long, lat, time_start=None, time_stop=None):
+    '''
+    - check the time indexing works
+    :param ds:
+    :param long:
+    :param lat:
+    :param time_start:
+    :param time_stop:
+    :return:
+    '''
     #t = ds.variables['t'][:].data[time_start:time_stop, :, long, lat][0] # temperatures at given time stamps, all pressure levels, single point in space
     t = get_potential_temp(ds, time_start, lat, long)[:10]
     dt = np.gradient(t) # derivative of t
@@ -33,19 +42,16 @@ def h_inversion(ds, long, lat, time_start=None, time_stop=None):
     # plt.grid(True)
     # plt.show()
 
-    return(h[np.argmax(ddt)]) # height at which second derivative is the highest
+    return(h[np.argmax(ddt)], np.argmax(ddt)) # height at which second derivative is the highest and its index
 
 print(h_inversion(ds, 0, 0, 0, 1))
-# for i in range(3):
-#     for j in range(4):
-#         h_inversion(ds, j, 0, i, i+1)
 
-def free_atm_lapse_rate(ds, long, lat, time_start=None, time_stop=None):
-    t = ds.variables['t'][:].data[time_start:time_stop, :, long, lat][0]  # temperatures at given time stamps, all pressure levels, single point in space
+def free_atm_lapse_rate(ds, long, lat, i_inv, time_start=None, time_stop=None):
+    t = ds.variables['t'][:].data[time_start:time_stop, :10, long, lat][0]  # temperatures at given time stamps, all pressure levels, single point in space
     dt = np.gradient(t)
-    p = ds.variables['isobaricInhPa'][:].data  # pressure levels
-    h = ds.variables['z'][:].data[time_start:time_stop, :, long, lat][0] / 9.80655 / 1000
-    plt.plot(t[:25], h[:25])
+    h = ds.variables['z'][:].data[time_start:time_stop, :10, long, lat][0] / 9.80655 / 1000
+    plt.plot(dt, h)
     plt.show()
+    return dt[i_inv]
 
-#free_atm_lapse_rate(ds, 0, 0, 0, 1)
+free_atm_lapse_rate(ds, 0, 0, 6, 0, 1)
