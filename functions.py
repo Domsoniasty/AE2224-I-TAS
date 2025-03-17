@@ -1,8 +1,5 @@
 import xarray as xr
-import pandas as pd
-import math
-import numpy as np
-import matplotlib.pyplot as plt
+
 
 ds = xr.open_dataset("gemini-testdata.grib", engine="cfgrib")
 # print(ds.variables['q'])
