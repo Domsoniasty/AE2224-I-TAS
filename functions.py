@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 ds = xr.open_dataset("gemini-testdata.grib", engine="cfgrib")
 
 
-def get_potential_temp(dataset):
-    temperature = dataset["t"].isel(time=0, latitude=0, longitude=0).values
+def get_potential_temp(dataset, time, lat, long):
+    temperature = dataset["t"].isel(time=time, latitude=lat, longitude=long).values
     pressure = dataset["isobaricInhPa"].values
     temperature_pressure_pairs = list(zip(pressure, temperature))
     pot_temp = []
@@ -18,4 +18,4 @@ def get_potential_temp(dataset):
     return pot_temp
 
 
-print(get_potential_temp(ds)[0])
+print(get_potential_temp(ds, 0, 0, 0))
