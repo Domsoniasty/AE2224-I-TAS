@@ -7,7 +7,7 @@ ds = xr.open_dataset("gemini-testdata.grib", engine="cfgrib")
 
 def h_inversion(ds, long, lat, time_start=None, time_stop=None):
     #t = ds.variables['t'][:].data[time_start:time_stop, :, long, lat][0] # temperatures at given time stamps, all pressure levels, single point in space
-    t = get_potential_temp(ds, time_start, lat, long)
+    t = get_potential_temp(ds, time_start, lat, long)[:10]
     dt = np.gradient(t) # derivative of t
     ddt = np.gradient(dt)
     p = ds.variables['isobaricInhPa'][:].data[:10] # pressure levels; only 10 first values
