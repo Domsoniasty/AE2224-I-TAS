@@ -11,7 +11,7 @@ import tempProfFitFunctions as my
 #######################################################
 
 # Input NetCDF file
-inp_file = '/Users/udhaya_chandiran/Downloads/data_stream-oper.nc'
+inp_file = 'gemini-testdata.grib'
 
 # Inputs
 lat = 36.5   # latitude in deg.
