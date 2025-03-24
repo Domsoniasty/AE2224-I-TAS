@@ -19,6 +19,6 @@ for case in files: # for each datafile
 
     # read in the data
     ds = xr.open_dataset(case)
-    inv_layer = inv.inversion(ds, lat, long, timeStart, timeStart)
+    inv_layer = inv.inversion(ds, lat, long, timeStart, timeEnd)
     print(inv_layer)
 
