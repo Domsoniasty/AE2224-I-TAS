@@ -11,15 +11,17 @@ import tempProfFitFunctions as my
 #######################################################
 
 # Input NetCDF file
-inp_file = 'gemini-testdata.grib'
+inp_file = 'gemini-testdata.nc'
 
 # Inputs
 lat = 36.5   # latitude in deg.
 long = -97.5   # longitude in deg.
 hMax = 3000   # Maximum height of data used for profile fitting
 # Start and stop time of data used for profile fitting
-timeStart = np.datetime64('2023-08-23T10:00:00.000000000')
-timeEnd = np.datetime64('2023-08-23T15:00:00.000000000')
+#timeStart = np.datetime64('2023-08-23T10:00:00.000000000')
+#timeEnd = np.datetime64('2023-08-23T15:00:00.000000000')
+timeStart = 'Not provided'
+timeEnd = 'Not provided'
 
 # Step sizes in finding the optimum values
 del_l=1   # Step size in m for inversion height
@@ -77,6 +79,7 @@ ax[4].set_ylabel('$\Theta _M \ (K)$')
 ax[5].set_ylabel('$S$')
 
 ax[5].tick_params(axis='x', labelrotation=90)
+plt.show()
 
 
 
@@ -99,7 +102,8 @@ theta_eta = my.calc_theta_eta(xPlot, eta)
 
 plt.plot(theta_v[tPlotInd, :], z, label='ERA5')
 plt.plot(theta_eta, zPlot, label='Fit')
-
+plt.legend()
+plt.show()
 # The following plots can be helpful in better understanding the model
 # To see individual parameters from the model in the plot
 # plt.plot(theta_eta, invH[tPlotInd]*np.ones(theta_eta.shape), label='$H_i$', linestyle="--")
@@ -116,6 +120,7 @@ plt.plot(theta_eta, zPlot, label='Fit')
 plt.xlabel('$\Theta_v \ (K)$')
 plt.ylabel('$h \ (m)$')
 plt.legend()
+plt.show()
 
 # plt.savefig(f'plots/tempProfFit{str(tPlotInd).zfill(3)}.jpeg', bbox_inches='tight')
 # plt.clf()

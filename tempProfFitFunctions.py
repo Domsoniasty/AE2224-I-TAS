@@ -65,15 +65,18 @@ def extDataFromNetCDF(inp_file, lat, long, hMax, tStart, tEnd):
         tEndInd = np.count_nonzero(ds.valid_time.values <= tEnd)
     
     time = ds.valid_time.values[tStartInd:tEndInd]
-
     # Extract other needed variables
     ds_t = ds.t[:, :, lat_i, long_i].values
-    ds_r = ds.r[:, :, lat_i, long_i].values
+    #ds_r = ds.r[:, :, lat_i, long_i].values
+    ds_r = np.zeros((len(ds_t), len(ds_t[0])))
     ds_q = ds.q[:, :, lat_i, long_i].values
     ds_clwc = ds.clwc[:, :, lat_i, long_i].values
-    ds_ciwc = ds.ciwc[:, :, lat_i, long_i].values
-    ds_crwc = ds.crwc[:, :, lat_i, long_i].values
-    ds_cswc = ds.cswc[:, :, lat_i, long_i].values
+    #ds_ciwc = ds.ciwc[:, :, lat_i, long_i].values
+    ds_ciwc = np.zeros((len(ds_t), len(ds_t[0])))
+    #ds_crwc = ds.crwc[:, :, lat_i, long_i].values
+    ds_crwc = np.zeros((len(ds_t), len(ds_t[0])))
+    #ds_cswc = ds.cswc[:, :, lat_i, long_i].values
+    ds_cswc = np.zeros((len(ds_t), len(ds_t[0])))
 
     # Convert temperature to potential temperature
     theta = ds_t * (10*100/ds.pressure_level).values**0.286
