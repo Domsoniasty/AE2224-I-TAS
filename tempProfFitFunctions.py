@@ -40,7 +40,7 @@ def extDataFromNetCDF(ds, lat, long, hMax, tStart, tEnd):
     z = h[:hMaxInd]
 
     # Indices of latitude and longitude of interest
-    lat_i = np.argmin(abs(ds.latitude.values - lat))
+    lat_i = np.argmin(abs(ds.latitude.values) - lat)
     long_i = np.argmin(abs(ds.longitude.values - long))
 
     # Sanity Check

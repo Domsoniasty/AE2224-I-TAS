@@ -12,11 +12,13 @@ for path in list(pathlib.Path('').iterdir()):
 for case in files: # for each datafile
     # name processing
     lat, long, timeStart, timeEnd = case.split('_') # extract info from name
+    lat = float(lat)
+    long = float(long)
     timeStart = np.datetime64(timeStart.replace('(', ':')) # colons can't be used in python filenames
     timeEnd = np.datetime64(timeEnd.replace('(', ':').replace('.nc', '')) # also remove the extension '.nc'
 
     # read in the data
     ds = xr.open_dataset(case)
-    inv_layer = inv.inversion(ds, lat, long, timeStart, timeEnd)
+    inv_layer = inv.inversion(ds, lat, long, timeStart, timeStart)
     print(inv_layer)
 
