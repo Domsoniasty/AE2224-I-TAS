@@ -14,6 +14,7 @@ def get_potential_temp(dataset, time, lat, long):
     for p, t, q in temperature_pressure_pairs:
         p_t = (t * (1000/p) ** 0.286)
         v_p_t = p_t * (1 + 0.61 * q)
+        #pot_temp.append(v_p_t)
         pot_temp.append(v_p_t)
     return pot_temp
 
