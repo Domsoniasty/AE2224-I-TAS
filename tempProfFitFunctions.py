@@ -6,10 +6,10 @@ import xarray as xr
 
 #
 
-def extDataFromNetCDF(inp_file, lat, long, hMax, tStart, tEnd):
+def extDataFromNetCDF(ds, lat, long, hMax, tStart, tEnd):
     
     # Open the NetCDF file
-    ds = xr.open_dataset(inp_file)
+    # ds = xr.open_dataset(inp_file) # ds will be passed from main.py
 
     # Dimensions: (valid_time: 48, pressure_level: 37, latitude: 13, longitude: 13)
     # Coordinates and variables in the dataset
@@ -154,10 +154,10 @@ def solveForCoeff(z, theta_i, l, del_h):
 
 
 
-def findProfParam(inp_file, lat, long, hMax, del_l, del2_h, tStart='Not provided', tEnd='Not provided'):
+def findProfParam(ds, lat, long, hMax, del_l, del2_h, tStart='Not provided', tEnd='Not provided'):
 
     # Extract height, time and temperature and compute virtual potential temperature
-    theta_v, z, time = extDataFromNetCDF(inp_file, lat, long, hMax, tStart, tEnd)
+    theta_v, z, time = extDataFromNetCDF(ds, lat, long, hMax, tStart, tEnd)
 
     # Initialize arrays
     invH = np.zeros(len(time))   # Inversion Height

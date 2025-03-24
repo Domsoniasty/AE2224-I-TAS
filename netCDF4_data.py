@@ -1,7 +1,7 @@
 import netCDF4 as nc
 import matplotlib.pyplot as plt
 
-data = nc.Dataset('testdata3.nc') # read data
+data = nc.Dataset('.testdata3.nc') # read data
 
 '''
 to extract data:    data.variables['t'][:, :].data[0][0] (2D array)
