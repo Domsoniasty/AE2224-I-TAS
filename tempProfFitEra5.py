@@ -4,6 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import tempProfFitFunctions as my
+#import pathlib
 #
 
 #######################################################
@@ -12,6 +13,11 @@ import tempProfFitFunctions as my
 
 # Input NetCDF file
 inp_file = 'gemini-testdata.nc'
+
+# dir = pathlib.Path('')
+# ls = list(dir.iterdir(ls))
+# ls[5].unlink()
+
 
 # Inputs
 lat = 36.5   # latitude in deg.
