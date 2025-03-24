@@ -72,13 +72,13 @@ def inversion(ds, lat, long, timeStart, timeEnd, hMax=3000):
     ax[5].plot(time, sumSqDifArr)
     ax[5].plot(time, cutOff_S*np.ones(time.shape), linestyle=":")
 
-    ax[5].set_xlabel('$time$')
-    ax[0].set_ylabel('$H_i \ (m)$')
-    ax[1].set_ylabel('$\Delta H \ (m)$')
-    ax[2].set_ylabel('$\Delta \Theta \ (K)$')
-    ax[3].set_ylabel('$\Gamma \ (K/km)$')
-    ax[4].set_ylabel('$\Theta _M \ (K)$')
-    ax[5].set_ylabel('$S$')
+    ax[5].set_xlabel(r'$time$')
+    ax[0].set_ylabel(r'$H_i \ (m)$')
+    ax[1].set_ylabel(r'$\Delta H \ (m)$')
+    ax[2].set_ylabel(r'$\Delta \Theta \ (K)$')
+    ax[3].set_ylabel(r'$\Gamma \ (K/km)$')
+    ax[4].set_ylabel(r'$\Theta _M \ (K)$')
+    ax[5].set_ylabel(r'$S$')
 
     ax[5].tick_params(axis='x', labelrotation=90)
     plt.show()
@@ -106,19 +106,19 @@ def inversion(ds, lat, long, timeStart, timeEnd, hMax=3000):
     plt.show()
     # The following plots can be helpful in better understanding the model
     # To see individual parameters from the model in the plot
-    # plt.plot(theta_eta, invH[tPlotInd]*np.ones(theta_eta.shape), label='$H_i$', linestyle="--")
-    # plt.plot(theta_eta, (invH[tPlotInd] - invThic[tPlotInd]/2)*np.ones(theta_eta.shape), label='$H_{i,Bottom}$', linestyle="--")
-    # plt.plot(theta_eta, (invH[tPlotInd] + invThic[tPlotInd]/2)*np.ones(theta_eta.shape), label='$H_{i,Top}$', linestyle="--")
-    # plt.plot(blTemp[tPlotInd] + gamma[tPlotInd]*zPlot, zPlot, label='$\Gamma$', linestyle="--")
-    # plt.plot(blTemp[tPlotInd]*np.ones(zPlot.shape), zPlot, label='$\Theta _M$', linestyle="--")
+    plt.plot(theta_eta, invH[tPlotInd]*np.ones(theta_eta.shape), label=r'$H_i$', linestyle="--")
+    plt.plot(theta_eta, (invH[tPlotInd] - invThic[tPlotInd]/2)*np.ones(theta_eta.shape), label='$H_{i,Bottom}$', linestyle="--")
+    plt.plot(theta_eta, (invH[tPlotInd] + invThic[tPlotInd]/2)*np.ones(theta_eta.shape), label='$H_{i,Top}$', linestyle="--")
+    plt.plot(blTemp[tPlotInd] + gamma[tPlotInd]*zPlot, zPlot, label=r'$\Gamma$', linestyle="--")
+    plt.plot(blTemp[tPlotInd]*np.ones(zPlot.shape), zPlot, label=r'$\Theta _M$', linestyle="--")
 
     # To compare the different methods of finding the inversion top theta_v as discussed in the paper
     # plt.plot((blTemp[tPlotInd] + invStren[tPlotInd])*np.ones(zPlot.shape), zPlot, label='$\Theta _{i,Top,a}$', linestyle="--")
     # plt.plot((blTemp[tPlotInd] + invStren[tPlotInd] + gamma[tPlotInd]*invThic[tPlotInd]/3)*np.ones(zPlot.shape), zPlot, label='$\Theta _{i,Top,a+b}$', linestyle="--")
     # plt.plot((blTemp[tPlotInd] + invStren[tPlotInd] - gamma[tPlotInd]*invThic[tPlotInd]/3)*np.ones(zPlot.shape), zPlot, label='$\Theta _{i,Top,a-b}$', linestyle="--")
 
-    plt.xlabel('$\Theta_v \ (K)$')
-    plt.ylabel('$h \ (m)$')
+    plt.xlabel(r'$\Theta_v \ (K)$')
+    plt.ylabel(r'$h \ (m)$')
     plt.legend()
     plt.show()
 
