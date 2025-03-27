@@ -5,7 +5,7 @@ import pandas as pd
 from pandas.core.common import index_labels_to_array
 
 
-def get_direction(dataset):
+'''def get_direction(dataset):
     u_components = dataset.variables['u'].data[0, :, 0, 0]
     v_components = dataset.variables['v'].data[0, :, 0, 0]
 
@@ -15,7 +15,7 @@ def get_direction(dataset):
         angle = math.atan2(u_components[i], v_components[i]) * 180 / math.pi
         direction.append(angle)
 
-    return direction
+    return direction'''
 
 
 def get_variable(dataset, var, pressure_lvl, lat, long):
@@ -30,7 +30,6 @@ def get_variable(dataset, var, pressure_lvl, lat, long):
 
     # Extracting the variable using the coordinates (pressure lvl, lat, long)
     variable = ds.variables[var].data[:, index_pressure_lvl, index_lat, index_long]
+
     return variable
 
-
-print(get_variable('testdata_multipledays.nc', 't', 1000, 56, 6))
