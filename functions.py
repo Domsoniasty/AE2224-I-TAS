@@ -1,5 +1,5 @@
 import xarray as xr
-
+import math
 
 ds = xr.open_dataset("gemini-testdata.grib", engine="cfgrib")
 # print(ds.variables['q'])
@@ -19,4 +19,18 @@ def get_potential_temp(dataset, time, lat, long):
     return pot_temp
 
 
-print(get_potential_temp(ds, 0, 0, 0))
+def get_variable(dataset, var, pressure_lvl, lat, long):
+
+    # Getting dataset
+    ds = xr.open_dataset(dataset)
+
+    # Getting indecies for presseure levels, latitudes and longitudes
+    index_pressure_lvl = math.ceil(abs(pressure_lvl - ds['pressure_level'].values[0]) / 25)
+    index_lat = math.ceil(abs(lat - ds['latitude'].values[0]) / 0.25)
+    index_long = math.ceil(abs(long - ds['longitude'].values[0]) / 0.25)
+
+    # Extracting the variable using the coordinates (pressure lvl, lat, long)
+    variable = ds.variables[var].data[:, index_pressure_lvl, index_lat, index_long]
+
+    return variable
+

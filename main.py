@@ -4,14 +4,17 @@ import tempProfFitEra5 as inv
 import numpy as np
 import netCDFreadingdata as ncr
 
-# create a list of datafiles' names
+
+# Create a list of datafiles' names
 def var_arrays(tInd=1, direction = -1, pressLvl=975):
+
     '''
     :param tInd: index of the time stamp to use; 1 is the middle (closest to gravity waves occurrence)
     :param direction: -1 is upstream, 1 is downstream, 0 is at the farm
     :return: array of the following arrays (in order): bool of whether gravity waves occur, virtual pot. temp, inversion height, inversion thickness, inversion strength,
     free atm. lapse rate, horizontal windspeed, vertical windspeed
     '''
+
     downstream_dist = 0.25 # deg lat/long
     files = []
     for path in list(pathlib.Path('').iterdir()):
