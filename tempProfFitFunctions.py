@@ -6,7 +6,7 @@ import xarray as xr
 
 #
 
-def extDataFromNetCDF(ds, lat, long, hMax, tStart, tEnd):
+def extDataFromNetCDF(ds, lat, long, hMax, tInd):
     
     # Open the NetCDF file
     # ds = xr.open_dataset(inp_file) # ds will be passed from main.py
@@ -50,21 +50,23 @@ def extDataFromNetCDF(ds, lat, long, hMax, tStart, tEnd):
 
     # Extract time array
     # time = ds.valid_time.values
-    if tStart == 'Not provided':
-        print('\nStart time is not provided!')
-        print('Starting from the first time stamp in the dataset!')
-        tStartInd = 0
-    else:
-        tStartInd = np.count_nonzero(ds.valid_time.values < tStart)
+    # if tStart == 'Not provided':
+    #     print('\nStart time is not provided!')
+    #     print('Starting from the first time stamp in the dataset!')
+    #     tStartInd = 0
+    # else:
+    #     tStartInd = np.count_nonzero(ds.valid_time.values < tStart)
+    #
+    # if tEnd == 'Not provided':
+    #     print('\nEnd time is not provided!')
+    #     print('Ending with the last time stamp in the dataset!')
+    #     tEndInd = len(ds.valid_time)
+    # else:
+    #     tEndInd = np.count_nonzero(ds.valid_time.values <= tEnd)
 
-    if tEnd == 'Not provided':
-        print('\nEnd time is not provided!')
-        print('Ending with the last time stamp in the dataset!')
-        tEndInd = len(ds.valid_time)
-    else:    
-        tEndInd = np.count_nonzero(ds.valid_time.values <= tEnd)
-    
-    time = ds.valid_time.values[tStartInd:tEndInd]
+
+
+    time = ds.valid_time.values[tInd:tInd+1]
     # Extract other needed variables
     ds_t = ds.t[:, :, lat_i, long_i].values
     #ds_r = ds.r[:, :, lat_i, long_i].values
@@ -88,7 +90,7 @@ def extDataFromNetCDF(ds, lat, long, hMax, tStart, tEnd):
     r_sat = moi_dry_ratio * (ds_q - sat_sts * (ds_r/100 - 1) * ds_q)
     r_L = moi_dry_ratio * (ds_clwc + ds_crwc + sat_sts * (ds_r/100 - 1) * ds_q) 
     theta_v = theta * (1 + 0.61*r_sat - r_L)
-    theta_v = theta_v[tStartInd:tEndInd, :hMaxInd]
+    theta_v = theta_v[tInd:tInd+1, :hMaxInd]
 
     # Return potential temperature, height and time
     return theta_v, z, time
@@ -149,15 +151,18 @@ def solveForCoeff(z, theta_i, l, del_h):
     # Calculate the variance between the measurements and the model
     theta_eta = calc_theta_eta(x, eta)
     sumSqDif = np.sum((theta_eta - theta_i)**2)
+    theta_bar = np.mean(theta_i)
+    totSumSq = np.sum((theta_i-theta_bar)**2)
+    rSq = 1 - sumSqDif/totSumSq
     
-    return sumSqDif, x
+    return sumSqDif, x, rSq
 
 
 
-def findProfParam(ds, lat, long, hMax, del_l, del2_h, tStart='Not provided', tEnd='Not provided'):
+def findProfParam(ds, lat, long, hMax, del_l, del2_h, tInd):
 
     # Extract height, time and temperature and compute virtual potential temperature
-    theta_v, z, time = extDataFromNetCDF(ds, lat, long, hMax, tStart, tEnd)
+    theta_v, z, time = extDataFromNetCDF(ds, lat, long, hMax, tInd)
 
     # Initialize arrays
     invH = np.zeros(len(time))   # Inversion Height
@@ -166,24 +171,25 @@ def findProfParam(ds, lat, long, hMax, del_l, del2_h, tStart='Not provided', tEn
     blTemp = np.zeros(len(time))   # Boundary Layer Temperature
     gamma = np.zeros(len(time))
     sumSqDifArr = np.zeros(len(time))   # Sum of squared difference
+    rSqArr = np.zeros(len(time))  # R^2
 
-    for tInd in range(len(time)): 
+    for i in range(len(time)):
 
         # Virtual potential temperature
-        theta_i = theta_v[tInd]
+        theta_i = theta_v[i]
 
         # To have a value for comparison in the loop
         # The end points that the loops will ignore are calculated here
         lCurr = z[-1]
         del_hCurr = np.max( z[1:]-z[:-1] )
-        sumSqDifBest, xBest = solveForCoeff(z, theta_i, lCurr, del_hCurr)
+        sumSqDifBest, xBest, rSqBest = solveForCoeff(z, theta_i, lCurr, del_hCurr)
         lBest = lCurr
         del_hBest = del_hCurr
 
         # Compute the model residual for each l and del_h
         for lCurr in np.arange(z[0], z[-1], del_l):
             for del_hCurr in np.arange(np.min(z[1:]-z[:-1]), np.max(z[1:]-z[:-1]), del2_h):
-                sumSqDifCurr, xCurr = solveForCoeff(z, theta_i, lCurr, del_hCurr)
+                sumSqDifCurr, xCurr, rSqCurr = solveForCoeff(z, theta_i, lCurr, del_hCurr)
                 # Check if this model is better
                 if sumSqDifCurr < sumSqDifBest:
                     sumSqDifBest = sumSqDifCurr
@@ -192,13 +198,14 @@ def findProfParam(ds, lat, long, hMax, del_l, del2_h, tStart='Not provided', tEn
                     del_hBest = del_hCurr
 
         # Save the best model parameters
-        invH[tInd] = lBest
-        invThic[tInd] = del_hBest
-        blTemp[tInd] = xBest[0]
-        invStren[tInd] = xBest[1]   # a+b gives the potential temperature jump in the Entrainment Layer,
+        invH[i] = lBest
+        invThic[i] = del_hBest
+        blTemp[i] = xBest[0]
+        invStren[i] = xBest[1]   # a+b gives the potential temperature jump in the Entrainment Layer,
                                     # However the paper suggests to use 'a' for inversion strength
-        gamma[tInd] = 3 * xBest[2] / del_hBest   # The paper says 2*b/del_h, but it seems like a typo
-        sumSqDifArr[tInd] = sumSqDifBest
+        gamma[i] = 3 * xBest[2] / del_hBest   # The paper says 2*b/del_h, but it seems like a typo
+        sumSqDifArr[i] = sumSqDifBest
+        rSqArr[i] = rSqBest
 
 
-    return time, z, theta_v, invH, invThic, blTemp, invStren, gamma, sumSqDifArr
+    return time, z, theta_v, invH, invThic, blTemp, invStren, gamma, sumSqDifArr, rSqArr
