@@ -4,7 +4,6 @@
 import numpy as np
 import xarray as xr
 
-#
 
 def extDataFromNetCDF(ds, lat, long, hMax, tStart, tEnd):
     
