@@ -24,7 +24,7 @@ import pathlib
 # timeStart = 'Not provided'
 # timeEnd = 'Not provided'
 
-def inversion(ds, lat, long, timeStart, timeEnd, hMax=3000):
+def inversion(ds, lat, long, tInd, hMax=3000):
     # Step sizes in finding the optimum values
     del_l=1   # Step size in m for inversion height
     del2_h=1   # Step size in m for inversion thickness
@@ -49,8 +49,8 @@ def inversion(ds, lat, long, timeStart, timeEnd, hMax=3000):
 
 
     # Find the profile fit
-    time, z, theta_v, invH, invThic, blTemp, invStren, gamma, sumSqDifArr = \
-        my.findProfParam(ds, lat, long, hMax, del_l, del2_h, tStart=timeStart, tEnd=timeEnd)
+    time, z, theta_v, invH, invThic, blTemp, invStren, gamma, sumSqDifArr, rSqArr = \
+        my.findProfParam(ds, lat, long, hMax, del_l, del2_h, tInd)
 
 
 
@@ -125,4 +125,4 @@ def inversion(ds, lat, long, timeStart, timeEnd, hMax=3000):
     # plt.savefig(f'plots/tempProfFit{str(tPlotInd).zfill(3)}.jpeg', bbox_inches='tight')
     # plt.clf()
 
-    return time, z, theta_v, invH, invThic, blTemp, invStren, gamma, sumSqDifArr
+    return time, z, theta_v, invH, invThic, blTemp, invStren, gamma, sumSqDifArr, rSqArr
