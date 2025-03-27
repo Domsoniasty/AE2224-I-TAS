@@ -81,7 +81,7 @@ def inversion(ds, lat, long, tInd, hMax=3000):
     ax[5].set_ylabel(r'$S$')
 
     ax[5].tick_params(axis='x', labelrotation=90)
-    plt.show()
+    # plt.show()
 
 
 
@@ -100,27 +100,27 @@ def inversion(ds, lat, long, tInd, hMax=3000):
     xPlot = [blTemp[tPlotInd], invStren[tPlotInd], gamma[tPlotInd]*invThic[tPlotInd]/3]
     theta_eta = my.calc_theta_eta(xPlot, eta)
 
-    plt.plot(theta_v[tPlotInd, :], z, label='ERA5')
-    plt.plot(theta_eta, zPlot, label='Fit')
-    plt.legend()
-    plt.show()
+    # plt.plot(theta_v[tPlotInd, :], z, label='ERA5')
+    # plt.plot(theta_eta, zPlot, label='Fit')
+    # plt.legend()
+    # plt.show()
     # The following plots can be helpful in better understanding the model
     # To see individual parameters from the model in the plot
-    plt.plot(theta_eta, invH[tPlotInd]*np.ones(theta_eta.shape), label=r'$H_i$', linestyle="--")
-    plt.plot(theta_eta, (invH[tPlotInd] - invThic[tPlotInd]/2)*np.ones(theta_eta.shape), label='$H_{i,Bottom}$', linestyle="--")
-    plt.plot(theta_eta, (invH[tPlotInd] + invThic[tPlotInd]/2)*np.ones(theta_eta.shape), label='$H_{i,Top}$', linestyle="--")
-    plt.plot(blTemp[tPlotInd] + gamma[tPlotInd]*zPlot, zPlot, label=r'$\Gamma$', linestyle="--")
-    plt.plot(blTemp[tPlotInd]*np.ones(zPlot.shape), zPlot, label=r'$\Theta _M$', linestyle="--")
+    # plt.plot(theta_eta, invH[tPlotInd]*np.ones(theta_eta.shape), label=r'$H_i$', linestyle="--")
+    # plt.plot(theta_eta, (invH[tPlotInd] - invThic[tPlotInd]/2)*np.ones(theta_eta.shape), label='$H_{i,Bottom}$', linestyle="--")
+    # plt.plot(theta_eta, (invH[tPlotInd] + invThic[tPlotInd]/2)*np.ones(theta_eta.shape), label='$H_{i,Top}$', linestyle="--")
+    # plt.plot(blTemp[tPlotInd] + gamma[tPlotInd]*zPlot, zPlot, label=r'$\Gamma$', linestyle="--")
+    # plt.plot(blTemp[tPlotInd]*np.ones(zPlot.shape), zPlot, label=r'$\Theta _M$', linestyle="--")
 
     # To compare the different methods of finding the inversion top theta_v as discussed in the paper
     # plt.plot((blTemp[tPlotInd] + invStren[tPlotInd])*np.ones(zPlot.shape), zPlot, label='$\Theta _{i,Top,a}$', linestyle="--")
     # plt.plot((blTemp[tPlotInd] + invStren[tPlotInd] + gamma[tPlotInd]*invThic[tPlotInd]/3)*np.ones(zPlot.shape), zPlot, label='$\Theta _{i,Top,a+b}$', linestyle="--")
     # plt.plot((blTemp[tPlotInd] + invStren[tPlotInd] - gamma[tPlotInd]*invThic[tPlotInd]/3)*np.ones(zPlot.shape), zPlot, label='$\Theta _{i,Top,a-b}$', linestyle="--")
 
-    plt.xlabel(r'$\Theta_v \ (K)$')
-    plt.ylabel(r'$h \ (m)$')
-    plt.legend()
-    plt.show()
+    # plt.xlabel(r'$\Theta_v \ (K)$')
+    # plt.ylabel(r'$h \ (m)$')
+    # plt.legend()
+    # plt.show()
 
     # plt.savefig(f'plots/tempProfFit{str(tPlotInd).zfill(3)}.jpeg', bbox_inches='tight')
     # plt.clf()

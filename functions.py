@@ -1,10 +1,6 @@
 import xarray as xr
 import math
 
-ds = xr.open_dataset("gemini-testdata.grib", engine="cfgrib")
-# print(ds.variables['q'])
-
-
 def get_potential_temp(dataset, time, lat, long):
     temperature = dataset["t"].isel(time=time, latitude=lat, longitude=long).values
     pressure = dataset["isobaricInhPa"].values
