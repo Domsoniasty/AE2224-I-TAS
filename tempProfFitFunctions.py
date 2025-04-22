@@ -148,6 +148,7 @@ def solveForCoeff(z, theta_i, l, del_h):
     x = np.linalg.solve(A, b)
 
     # Calculate the variance between the measurements and the model
+    # CHECK
     theta_eta = calc_theta_eta(x, eta)
     sumSqDif = np.sum((theta_eta - theta_i)**2)
     theta_bar = np.mean(theta_i)

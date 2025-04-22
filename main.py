@@ -18,7 +18,7 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     downstream_dist = 0.25 # deg lat/long
     files = []
     # print(list(pathlib.Path('data').glob('*/*')))
-    for path in list(pathlib.Path('data').glob('dogger_bank/*')):
+    for path in list(pathlib.Path('data').glob('yangjiang/*')):
         if  str(path)[-2:] == 'nc': # str(path)[0] != '.' and
             files.append(str(path))
     # print(files)
@@ -31,10 +31,11 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     # gammaArr = np.empty(len(files))
     # rSqArr = np.empty(len(files))
     results = np.empty((len(files), 8))
+    rSqMax = 0
     for i in range(len(files)): # for each datafile
         # name processing
         case = files[i]
-        # print(case)
+        print(case)
         caseSplit = case.split('\\')[-1].split('_') # extract info from name
         lat = float(caseSplit[0])
         # print('lat:', lat)
@@ -58,6 +59,8 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
         horSpeed = np.sqrt(uArr**2 + vArr**2)
         verSpeed = fnc.get_variable(case, 'w', pressLvl, lat, long)[tInd]
         results[i] = np.array([gravity_waves, theta_v, invH[0], invThic[0], invStren[0], gamma[0], horSpeed, verSpeed])
+        if invrSq[0] > rSqMax: rSqMax = invrSq[0]
+        print('r2:', invrSq)
     return results
 #print(var_arrays()[0])
 var_arrays()
