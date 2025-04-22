@@ -17,9 +17,11 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
 
     downstream_dist = 0.25 # deg lat/long
     files = []
-    for path in list(pathlib.Path('').iterdir()):
-        if str(path)[0] != '.' and str(path)[-2:] == 'nc':
+    for path in list(pathlib.Path('data').glob('*/*')):
+        if  str(path)[-2:] == 'nc': # str(path)[0] != '.' and
             files.append(str(path))
+    print(files)
+    print(list(pathlib.Path('data').glob('*/*')))
 
     # theta_vArr = np.empty(len(files))
     # invHArr = np.empty(len(files))
@@ -31,14 +33,15 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     for i in range(len(files)): # for each datafile
         # name processing
         case = files[i]
-        caseSplit = case.split('_') # extract info from name
+        caseSplit = case.split('\\')[-1].split('_') # extract info from name
         lat = float(caseSplit[0])
         long = float(caseSplit[1])
         lat, long = np.array([lat, long])
         try: caseSplit[2] = caseSplit[2].replace('.nc', '')
         except: pass
         print(caseSplit[2])
-        gravity_waves = bool(int(caseSplit[2]))
+        if caseSplit[2] == 'Yes': gravity_waves = True
+        else: gravity_waves = False
         #timeStart = np.datetime64(timeStart.replace('(', ':')) # colons can't be used in python filenames
         #timeEnd = np.datetime64(timeEnd.replace('(', ':').replace('.nc', '')) # also remove the extension '.nc'
 
@@ -53,4 +56,6 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
         verSpeed = fnc.get_variable(case, 'w', pressLvl, lat, long)[tInd]
         results[i] = np.array([gravity_waves, theta_v, invH[0], invThic[0], invStren[0], gamma[0], horSpeed, verSpeed])
     return results
-print(var_arrays())
+#print(var_arrays()[0])
+var_arrays()
+
