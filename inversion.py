@@ -71,10 +71,10 @@ def inversion_new(ds, long, lat, time_start=0, time_stop=1, l=0):
     g = (np.log(2 * np.cosh(mu)) + mu) / 2
     A = np.array([[N, np.sum(f), np.sum(g)], [np.sum(f), np.sum(f**2), np.sum(f*g)], [np.sum(g), np.sum(f*g), np.sum(g**2)]])
     b = np.array([[np.sum(t)], [np.sum(f*t)], [np.sum(g*t)]])
-    print(np.linalg.lstsq(A, b)[0])
+    #print(np.linalg.lstsq(A, b)[0])
     delta_h = 10
     l = 5
-    print(np.linalg.lstsq(A, b)[0])
+    #print(np.linalg.lstsq(A, b)[0])
 
 
     # def theta(z):

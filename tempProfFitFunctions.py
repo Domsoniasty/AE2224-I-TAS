@@ -43,9 +43,9 @@ def extDataFromNetCDF(ds, lat, long, hMax, tInd):
     long_i = np.argmin(abs(ds.longitude.values - long))
 
     # Sanity Check
-    print(f"Maximum height: {h[hMaxInd-1]} m")
-    print(f"Chosen latitude: {ds.latitude[lat_i].values}")
-    print(f"Chosen longitude: {ds.longitude[long_i].values}")
+    # print(f"Maximum height: {h[hMaxInd-1]} m")
+    # print(f"Chosen latitude: {ds.latitude[lat_i].values}")
+    # print(f"Chosen longitude: {ds.longitude[long_i].values}")
 
     # Extract time array
     # time = ds.valid_time.values

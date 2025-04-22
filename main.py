@@ -17,12 +17,12 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
 
     downstream_dist = 0.25 # deg lat/long
     files = []
-    print(list(pathlib.Path('data').glob('*/*')))
-    for path in list(pathlib.Path('data').glob('*/*')):
+    # print(list(pathlib.Path('data').glob('*/*')))
+    for path in list(pathlib.Path('data').glob('dogger_bank/*')):
         if  str(path)[-2:] == 'nc': # str(path)[0] != '.' and
             files.append(str(path))
-    print(files)
-    print(list(pathlib.Path('data').glob('*/*')))
+    # print(files)
+    # print(list(pathlib.Path('data').glob('*/*')))
 
     # theta_vArr = np.empty(len(files))
     # invHArr = np.empty(len(files))
@@ -34,15 +34,15 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     for i in range(len(files)): # for each datafile
         # name processing
         case = files[i]
-        print(case)
+        # print(case)
         caseSplit = case.split('\\')[-1].split('_') # extract info from name
         lat = float(caseSplit[0])
-        print('lat:', lat)
+        # print('lat:', lat)
         long = float(caseSplit[1])
         lat, long = np.array([lat, long])
         try: caseSplit[2] = caseSplit[2].replace('.nc', '')
         except: pass
-        print(caseSplit[2])
+        # print(caseSplit[2])
         if caseSplit[2] == 'Yes': gravity_waves = True
         else: gravity_waves = False
         #timeStart = np.datetime64(timeStart.replace('(', ':')) # colons can't be used in python filenames
