@@ -17,6 +17,7 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
 
     downstream_dist = 0.25 # deg lat/long
     files = []
+    print(list(pathlib.Path('data').glob('*/*')))
     for path in list(pathlib.Path('data').glob('*/*')):
         if  str(path)[-2:] == 'nc': # str(path)[0] != '.' and
             files.append(str(path))
@@ -33,8 +34,10 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     for i in range(len(files)): # for each datafile
         # name processing
         case = files[i]
+        print(case)
         caseSplit = case.split('\\')[-1].split('_') # extract info from name
         lat = float(caseSplit[0])
+        print('lat:', lat)
         long = float(caseSplit[1])
         lat, long = np.array([lat, long])
         try: caseSplit[2] = caseSplit[2].replace('.nc', '')
