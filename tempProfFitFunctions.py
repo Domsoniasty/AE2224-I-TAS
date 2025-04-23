@@ -43,9 +43,9 @@ def extDataFromNetCDF(ds, lat, long, hMax, tInd):
     long_i = np.argmin(abs(ds.longitude.values - long))
 
     # Sanity Check
-    print(f"Maximum height: {h[hMaxInd-1]} m")
-    print(f"Chosen latitude: {ds.latitude[lat_i].values}")
-    print(f"Chosen longitude: {ds.longitude[long_i].values}")
+    # print(f"Maximum height: {h[hMaxInd-1]} m")
+    # print(f"Chosen latitude: {ds.latitude[lat_i].values}")
+    # print(f"Chosen longitude: {ds.longitude[long_i].values}")
 
     # Extract time array
     # time = ds.valid_time.values
@@ -148,6 +148,7 @@ def solveForCoeff(z, theta_i, l, del_h):
     x = np.linalg.solve(A, b)
 
     # Calculate the variance between the measurements and the model
+    # CHECK
     theta_eta = calc_theta_eta(x, eta)
     sumSqDif = np.sum((theta_eta - theta_i)**2)
     theta_bar = np.mean(theta_i)

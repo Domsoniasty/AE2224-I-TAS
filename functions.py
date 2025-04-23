@@ -1,10 +1,6 @@
 import xarray as xr
 import math
 
-ds = xr.open_dataset("gemini-testdata.grib", engine="cfgrib")
-# print(ds.variables['q'])
-
-
 def get_potential_temp(dataset, time, lat, long):
     temperature = dataset["t"].isel(time=time, latitude=lat, longitude=long).values
     pressure = dataset["isobaricInhPa"].values
@@ -24,7 +20,7 @@ def get_variable(dataset, var, pressure_lvl, lat, long):
     # Getting dataset
     ds = xr.open_dataset(dataset)
 
-    # Getting indecies for presseure levels, latitudes and longitudes
+    # Getting indices for presseure levels, latitudes and longitudes
     index_pressure_lvl = math.ceil(abs(pressure_lvl - ds['pressure_level'].values[0]) / 25)
     index_lat = math.ceil(abs(lat - ds['latitude'].values[0]) / 0.25)
     index_long = math.ceil(abs(long - ds['longitude'].values[0]) / 0.25)
