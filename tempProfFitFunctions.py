@@ -196,6 +196,7 @@ def findProfParam(ds, lat, long, hMax, del_l, del2_h, tInd):
                     xBest = xCurr
                     lBest = lCurr
                     del_hBest = del_hCurr
+                if rSqCurr > rSqBest: rSqBest = rSqCurr
 
         # Save the best model parameters
         invH[i] = lBest
