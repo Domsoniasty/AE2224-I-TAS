@@ -38,7 +38,7 @@ df = pd.DataFrame({
     'inversion_layer_height': load_data[:,2],
     'inversion_layer_strength': load_data[:,4],
     'lapse_rate': load_data[:,5],
-    'inversion_layer_thickness':load_data[:,3]
+    'inversion_layer_thickness': load_data[:,3]
 })
 
 X = df[['virtual_potential_temperature', 'wind_speed_horizontal',
@@ -64,9 +64,7 @@ Both manual and automatic fitting were tried. Uncomment respective code to try
 
 #automatic fitting
 
-gam = (LogisticGAM(
-    s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6)
-))
+gam = LogisticGAM( s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) )
 gam.gridsearch(X, y)
 
 # Plot the effect of each condition
