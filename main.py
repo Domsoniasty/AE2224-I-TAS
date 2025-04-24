@@ -18,7 +18,7 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     downstream_dist = 0.25 # deg lat/long
     files = []
     # print(list(pathlib.Path('data').glob('*/*')))
-    for path in list(pathlib.Path('data').glob('yangjiang/*')):
+    for path in list(pathlib.Path('data').glob('*/*')):
         if  str(path)[-2:] == 'nc': # str(path)[0] != '.' and
             files.append(str(path))
     # print(files)
@@ -60,8 +60,8 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
         verSpeed = fnc.get_variable(case, 'w', pressLvl, lat, long)[tInd]
         results[i] = np.array([gravity_waves, theta_v, invH[0], invThic[0], invStren[0], gamma[0], horSpeed, verSpeed])
         if invrSq[0] > rSqMax: rSqMax = invrSq[0]
-        print('r2:', invrSq)
+        if invrSq < 0.9: print('r2:', invrSq)
     return results
 #print(var_arrays()[0])
-var_arrays()
+# var_arrays()
 
