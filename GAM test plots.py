@@ -6,7 +6,10 @@ import matplotlib.pyplot as plt
 
 from main import var_arrays
 
-load_data = var_arrays() #data extracted from function in separate file
+#load_data = var_arrays() #data extracted from function in separate file
+file = open('data_exported.npy', 'rb')
+load_data = np.load(file)
+file.close()
 
 
 # Load data here - Different index for different data

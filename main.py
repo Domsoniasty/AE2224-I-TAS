@@ -61,7 +61,10 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
         results[i] = np.array([gravity_waves, theta_v, invH[0], invThic[0], invStren[0], gamma[0], horSpeed, verSpeed])
         if invrSq[0] > rSqMax: rSqMax = invrSq[0]
         if invrSq < 0.9: print('r2:', invrSq)
+    export = open('data_exported.npy', 'wb')
+    np.save(export, results)
+    export.close()
     return results
 #print(var_arrays()[0])
-# var_arrays()
+var_arrays()
 
