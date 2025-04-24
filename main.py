@@ -18,7 +18,7 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     downstream_dist = 0.25 # deg lat/long
     files = []
     # print(list(pathlib.Path('data').glob('*/*')))
-    for path in list(pathlib.Path('data').glob('yangjiang/*')):
+    for path in list(pathlib.Path('data').glob('*/*')):
         if  str(path)[-2:] == 'nc': # str(path)[0] != '.' and
             files.append(str(path))
     # print(files)
