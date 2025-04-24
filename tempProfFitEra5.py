@@ -62,26 +62,28 @@ def inversion(ds, lat, long, tInd, hMax=3000):
     cutOff_S = 2
 
     # Plot the time series of all the parameters
-    # fig, ax = plt.subplots(6, 1, figsize=(8,10), dpi=300, sharex=True)
-    #
-    # ax[0].plot(time, invH)
-    # ax[1].plot(time, invThic)
-    # ax[2].plot(time, invStren)
-    # ax[3].plot(time, gamma*1000)
-    # ax[4].plot(time, blTemp)
-    # ax[5].plot(time, sumSqDifArr)
-    # ax[5].plot(time, cutOff_S*np.ones(time.shape), linestyle=":")
-    #
-    # ax[5].set_xlabel(r'$time$')
-    # ax[0].set_ylabel(r'$H_i \ (m)$')
-    # ax[1].set_ylabel(r'$\Delta H \ (m)$')
-    # ax[2].set_ylabel(r'$\Delta \Theta \ (K)$')
-    # ax[3].set_ylabel(r'$\Gamma \ (K/km)$')
-    # ax[4].set_ylabel(r'$\Theta _M \ (K)$')
-    # ax[5].set_ylabel(r'$S$')
-    #
-    # ax[5].tick_params(axis='x', labelrotation=90)
-    # # plt.show()
+    '''
+    fig, ax = plt.subplots(6, 1, figsize=(8,10), dpi=300, sharex=True)
+
+    ax[0].plot(time, invH)
+    ax[1].plot(time, invThic)
+    ax[2].plot(time, invStren)
+    ax[3].plot(time, gamma*1000)
+    ax[4].plot(time, blTemp)
+    ax[5].plot(time, sumSqDifArr)
+    ax[5].plot(time, cutOff_S*np.ones(time.shape), linestyle=":")
+
+    ax[5].set_xlabel(r'$time$')
+    ax[0].set_ylabel(r'$H_i \ (m)$')
+    ax[1].set_ylabel(r'$\Delta H \ (m)$')
+    ax[2].set_ylabel(r'$\Delta \Theta \ (K)$')
+    ax[3].set_ylabel(r'$\Gamma \ (K/km)$')
+    ax[4].set_ylabel(r'$\Theta _M \ (K)$')
+    ax[5].set_ylabel(r'$S$')
+
+    ax[5].tick_params(axis='x', labelrotation=90)
+    # plt.show()
+    '''
 
 
 
@@ -100,10 +102,10 @@ def inversion(ds, lat, long, tInd, hMax=3000):
     xPlot = [blTemp[tPlotInd], invStren[tPlotInd], gamma[tPlotInd]*invThic[tPlotInd]/3]
     theta_eta = my.calc_theta_eta(xPlot, eta)
 
-    plt.plot(theta_v[tPlotInd, :], z, label='ERA5')
-    plt.plot(theta_eta, zPlot, label='Fit')
-    plt.legend()
-    plt.show()
+    # plt.plot(theta_v[tPlotInd, :], z, label='ERA5')
+    # plt.plot(theta_eta, zPlot, label='Fit')
+    # plt.legend()
+    # plt.show()
     # The following plots can be helpful in better understanding the model
     # To see individual parameters from the model in the plot
     # plt.plot(theta_eta, invH[tPlotInd]*np.ones(theta_eta.shape), label=r'$H_i$', linestyle="--")
