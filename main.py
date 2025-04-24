@@ -32,10 +32,21 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     # rSqArr = np.empty(len(files))
     results = np.empty((len(files), 8))
     rSqMax = 0
+    count = 0 # count used for progress tracking of loading files
+    percentage = 0 #percentage for loading count
+    print_load = True
+    print((len(files)))
     for i in range(len(files)): # for each datafile
         # name processing
         case = files[i]
         print(case)
+
+        if (count % 5) == 0:
+            percentage = count*100/(len(files))
+            print(f"Load is {percentage}% complete")
+
+        count +=1
+
         caseSplit = case.split('\\')[-1].split('_') # extract info from name
         lat = float(caseSplit[0])
         # print('lat:', lat)
@@ -61,7 +72,10 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
         results[i] = np.array([gravity_waves, theta_v, invH[0], invThic[0], invStren[0], gamma[0], horSpeed, verSpeed])
         if invrSq[0] > rSqMax: rSqMax = invrSq[0]
         if invrSq < 0.9: print('r2:', invrSq)
+    export = open('data_exported.npy', 'wb')
+    np.save(export, results)
+    export.close()
     return results
-#print(var_arrays()[0])
+# print(var_arrays()[0])
 # var_arrays()
 

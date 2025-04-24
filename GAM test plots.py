@@ -6,7 +6,12 @@ import matplotlib.pyplot as plt
 
 from main import var_arrays
 
-load_data = var_arrays() #data extracted from function in separate file
+#load_data = var_arrays() #data extracted from function in separate file
+
+
+file = open('data_exported_full.npy', 'rb')
+load_data = np.load(file)
+file.close()
 
 
 # Load data here - Different index for different data
@@ -79,6 +84,7 @@ for i, feature in enumerate(feature_names):
     x_grid = gam.generate_X_grid(term=i)  # Generate grid
     probability = gam.partial_dependence(term=i, X = x_grid)  # Log-odds from the GAM
     #probability = 10**(probability)/(1+10**(probability)) #converting to probability using formula from the textbook
+    probability = 1 / (1 + np.exp(-probability))  # Convert to probability using sigmoid function (chat said this could be a reason)
 
     plt.plot(x_grid[:, i], probability)  # Plot probability curve
     plt.title(f'Effect of {feature}')
@@ -88,3 +94,15 @@ for i, feature in enumerate(feature_names):
 
 plt.tight_layout()
 plt.show()
+
+#Finding data about data set
+num_gravity_waves = (df['gravity_wave'] == 1).sum()
+
+print(f"The size of the data set is {len(load_data)} with {num_gravity_waves} cases of gravity waves. This represents {round(num_gravity_waves*100/len(load_data),2)} % of the data set.")
+
+
+
+
+
+
+
