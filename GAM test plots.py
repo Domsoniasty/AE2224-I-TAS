@@ -6,10 +6,12 @@ import matplotlib.pyplot as plt
 
 from main import var_arrays
 
-#load_data = var_arrays() #data extracted from function in separate file
-file = open('data_exported.npy', 'rb')
-load_data = np.load(file)
-file.close()
+load_data = var_arrays() #data extracted from function in separate file
+
+
+#file = open('data_exported_short.npy', 'rb')
+#load_data = np.load(file)
+#file.close()
 
 
 # Load data here - Different index for different data
@@ -81,7 +83,7 @@ for i, feature in enumerate(feature_names):
     fig.add_subplot(rows, columns, i + 1)
     x_grid = gam.generate_X_grid(term=i)  # Generate grid
     probability = gam.partial_dependence(term=i, X = x_grid)  # Log-odds from the GAM
-    #probability = 10**(probability)/(1+10**(probability)) #converting to probability using formula from the textbook
+    probability = 10**(probability)/(1+10**(probability)) #converting to probability using formula from the textbook
 
     plt.plot(x_grid[:, i], probability)  # Plot probability curve
     plt.title(f'Effect of {feature}')
