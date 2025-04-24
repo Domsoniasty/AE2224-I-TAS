@@ -77,5 +77,5 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     export.close()
     return results
 #print(var_arrays()[0])
-#var_arrays()
+var_arrays()
 
