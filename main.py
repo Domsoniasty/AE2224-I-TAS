@@ -19,7 +19,7 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
     files = []
     # print(list(pathlib.Path('data').glob('*/*')))
     for path in list(pathlib.Path('data').glob('*/*')):
-        if str(path)[-2:] == 'nc': # str(path)[0] != '.' and
+        if  str(path)[-2:] == 'nc': # str(path)[0] != '.' and
             files.append(str(path))
     # print(files)
     # print(list(pathlib.Path('data').glob('*/*')))
@@ -71,7 +71,8 @@ def var_arrays(tInd=1, direction = -1, pressLvl=975):
         verSpeed = fnc.get_variable(case, 'w', pressLvl, lat, long)[tInd]
         results[i] = np.array([gravity_waves, theta_v, invH[0], invThic[0], invStren[0], gamma[0], horSpeed, verSpeed])
         if invrSq[0] > rSqMax: rSqMax = invrSq[0]
-        if invrSq < 0.9: print('r2:', invrSq)
+        #if invrSq < 0.9: print('r2:', invrSq)
+        print('r2:', invrSq)
     export = open('data_exported.npy', 'wb')
     np.save(export, results)
     export.close()
