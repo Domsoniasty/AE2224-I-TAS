@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-from main import var_arrays
+#from main import var_arrays
 
 #load_data = var_arrays() #data extracted from function in separate file
 
@@ -41,13 +41,16 @@ df = pd.DataFrame({
     'inversion_layer_thickness': load_data[:,3]
 })
 
+
+
 X = df[['virtual_potential_temperature', 'wind_speed_horizontal',
         'wind_speed_vertical', 'inversion_layer_height',
         'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness']].values
-
+print(X)
 y = df['gravity_wave'].values
 
 
+print(f'The number of data points is {len(y)}')
 
 
 # Fit a GAM
