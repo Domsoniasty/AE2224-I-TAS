@@ -49,8 +49,7 @@ def inversion(ds, lat, long, tInd, hMax=3000):
 
 
     # Find the profile fit
-    time, z, theta_v, invH, invThic, blTemp, invStren, gamma, sumSqDifArr, rSqArr = \
-        my.findProfParam(ds, lat, long, hMax, del_l, del2_h, tInd)
+    time, z, theta_v, invH, invThic, blTemp, invStren, gamma, sumSqDifArr, rSqArr = my.findProfParam(ds, lat, long, hMax, del_l, del2_h, tInd)
 
 
 
@@ -62,28 +61,27 @@ def inversion(ds, lat, long, tInd, hMax=3000):
     cutOff_S = 2
 
     # Plot the time series of all the parameters
-    '''
-    fig, ax = plt.subplots(6, 1, figsize=(8,10), dpi=300, sharex=True)
 
-    ax[0].plot(time, invH)
-    ax[1].plot(time, invThic)
-    ax[2].plot(time, invStren)
-    ax[3].plot(time, gamma*1000)
-    ax[4].plot(time, blTemp)
-    ax[5].plot(time, sumSqDifArr)
-    ax[5].plot(time, cutOff_S*np.ones(time.shape), linestyle=":")
-
-    ax[5].set_xlabel(r'$time$')
-    ax[0].set_ylabel(r'$H_i \ (m)$')
-    ax[1].set_ylabel(r'$\Delta H \ (m)$')
-    ax[2].set_ylabel(r'$\Delta \Theta \ (K)$')
-    ax[3].set_ylabel(r'$\Gamma \ (K/km)$')
-    ax[4].set_ylabel(r'$\Theta _M \ (K)$')
-    ax[5].set_ylabel(r'$S$')
-
-    ax[5].tick_params(axis='x', labelrotation=90)
+    # fig, ax = plt.subplots(6, 1, figsize=(8,10), dpi=300, sharex=True)
+    #
+    # ax[0].plot(time, invH)
+    # ax[1].plot(time, invThic)
+    # ax[2].plot(time, invStren)
+    # ax[3].plot(time, gamma*1000)
+    # ax[4].plot(time, blTemp)
+    # ax[5].plot(time, sumSqDifArr)
+    # ax[5].plot(time, cutOff_S*np.ones(time.shape), linestyle=":")
+    #
+    # ax[5].set_xlabel(r'$time$')
+    # ax[0].set_ylabel(r'$H_i \ (m)$')
+    # ax[1].set_ylabel(r'$\Delta H \ (m)$')
+    # ax[2].set_ylabel(r'$\Delta \Theta \ (K)$')
+    # ax[3].set_ylabel(r'$\Gamma \ (K/km)$')
+    # ax[4].set_ylabel(r'$\Theta _M \ (K)$')
+    # ax[5].set_ylabel(r'$S$')
+    #
+    # ax[5].tick_params(axis='x', labelrotation=90)
     # plt.show()
-    '''
 
 
 

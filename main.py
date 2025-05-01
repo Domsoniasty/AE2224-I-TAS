@@ -22,7 +22,7 @@ def var_arrays(tInd=1, direction=-1, pressLvl=975):
         if str(path)[-2:] == 'nc':  # str(path)[0] != '.' and
             files.append(str(path))
 
-    results = np.empty((len(files), 8))
+    results = np.empty((len(files), 9))
     rSqMax = 0
     count = 0  # count used for progress tracking of loading files
     percentage = 0  # percentage for loading count
@@ -69,8 +69,9 @@ def var_arrays(tInd=1, direction=-1, pressLvl=975):
         vArr = fnc.get_variable(case, 'v', pressLvl, lat, long)[tInd]
         horSpeed = np.sqrt(uArr**2 + vArr**2)
         verSpeed = fnc.get_variable(case, 'w', pressLvl, lat, long)[tInd]
-        results[i] = np.array([gravity_waves, theta_v, invH[0], invThic[0], invStren[0], gamma[0], horSpeed, verSpeed])
-
+        verShear = np.sqrt(fnc.get_variable(case, 'u', 850, lat, long)[tInd]**2 + fnc.get_variable(case, 'v', 850, lat, long)[tInd]**2) - np.sqrt(fnc.get_variable(case, 'u', 500, lat, long)[tInd]**2 + fnc.get_variable(case, 'v', 500, lat, long)[tInd]**2)
+        results[i] = np.array([gravity_waves, theta_v, invH[0], invThic[0], invStren[0], gamma[0], horSpeed, verSpeed, verShear])
+        # print(verShear)
         if invrSq[0] > rSqMax:
             rSqMax = invrSq[0]
         print('r2:', invrSq)
@@ -78,4 +79,6 @@ def var_arrays(tInd=1, direction=-1, pressLvl=975):
     np.save(export, results)
     export.close()
     return results
+
+var_arrays()
 

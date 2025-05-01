@@ -20,7 +20,10 @@ def get_variable(dataset, var, pressure_lvl, lat, long):
     ds = xr.open_dataset(dataset)
 
     # Getting indices for presseure levels, latitudes and longitudes
-    index_pressure_lvl = math.ceil(abs(pressure_lvl - ds['pressure_level'].values[0]) / 25)
+    if pressure_lvl >=750:
+        index_pressure_lvl = math.ceil(abs(pressure_lvl - 1000) / 25)
+    else:
+        index_pressure_lvl = 11 + math.ceil(abs(pressure_lvl - 700) / 50)
     index_lat = math.ceil(abs(lat - ds['latitude'].values[0]) / 0.25)
     index_long = math.ceil(abs(long - ds['longitude'].values[0]) / 0.25)
 
