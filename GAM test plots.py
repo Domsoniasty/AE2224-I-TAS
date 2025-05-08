@@ -1,4 +1,4 @@
-from pygam import LogisticGAM, s
+from pygam import LogisticGAM, s, LinearGAM, GAM
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 #load_data = var_arrays() #data extracted from function in separate file
 
 
-file = open('data_exported_full.npy', 'rb')
+file = open('data_exported.npy', 'rb')
 load_data = np.load(file)
 file.close()
 
@@ -27,8 +27,11 @@ file.close()
     5 = free atm. lapse rate
     6 = horizontal wind speed
     7 = vertical windspeed
+    8 = vertical wind shear
 
 '''
+
+print(load_data)
 
 df = pd.DataFrame({
     'virtual_potential_temperature': load_data[:,1],
@@ -38,14 +41,16 @@ df = pd.DataFrame({
     'inversion_layer_height': load_data[:,2],
     'inversion_layer_strength': load_data[:,4],
     'lapse_rate': load_data[:,5],
-    'inversion_layer_thickness': load_data[:,3]
+    'inversion_layer_thickness': load_data[:,3],
+    'vertical_wind_shear': load_data[:,8]
 })
 
 
 
 X = df[['virtual_potential_temperature', 'wind_speed_horizontal',
         'wind_speed_vertical', 'inversion_layer_height',
-        'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness']].values
+        'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness','vertical_wind_shear']].values
+
 print(X)
 y = df['gravity_wave'].values
 
@@ -60,24 +65,30 @@ Both manual and automatic fitting were tried. Uncomment respective code to try
 '''
 
 #manual fitting
+#logisticGam
+gam = (LogisticGAM(
+    s(0,lam=10, n_splines=7) + s(1,lam=10, n_splines=7) + s(2,lam=10, n_splines=7) + s(3,lam=10, n_splines=7) + s(4,lam=10, n_splines=7) + s(5,lam=10, n_splines=7) + s(6,lam=10, n_splines=7) + s(7,lam=10, n_splines=7)).fit(X,y))
 
-#gam = (LogisticGAM(
-    #s(0,lam=10, n_splines=15) + s(1,lam=10, n_splines=15) + s(2,lam=10, n_splines=15) + s(3,lam=10, n_splines=15) + s(4,lam=10, n_splines=15) + s(5,lam=10, n_splines=15) + s(6,lam=10, n_splines=15)
-#).fit(X,y))
+gam.summary()
+#LinearGam
+'''
+gam = LinearGAM(s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) + s(7)).fit(X,y)
+gam.summary()
+'''
 
 #automatic fitting
 
-gam = LogisticGAM( s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) )
-gam.gridsearch(X, y)
+#gam = LogisticGAM( s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) + s(7) )
+#gam.gridsearch(X, y)
 
 # Plot the effect of each condition
-fig=plt.figure(figsize=(10,7))
+fig=plt.figure(figsize=(10,8))
 rows = 3
 columns = 3
 
 feature_names = ['virtual_potential_temperature', 'wind_speed_horizontal',
                  'wind_speed_vertical', 'inversion_layer_height',
-                 'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness']
+                 'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness', 'vertical_wind_shear']
 
 # Plot each smooth function
 for i, feature in enumerate(feature_names):
