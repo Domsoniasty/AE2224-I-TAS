@@ -3,15 +3,22 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
 #from main import var_arrays
 
 #load_data = var_arrays() #data extracted from function in separate file
 
 
-file = open('data_exported_full.npy', 'rb')
+file = open('data_exported.npy', 'rb')
 load_data = np.load(file)
 file.close()
+
+data_products = np.empty([60, 0])
+
+for i in range(1, 9):
+    for j in range(i+1, 9):
+        data_products = np.append(data_products, np.reshape(load_data[:, i] * load_data[:, j], [60, 1]), axis=1)
+
+load_data = np.append(load_data, data_products, axis=1)
 
 
 # Load data here - Different index for different data
@@ -27,25 +34,35 @@ file.close()
     5 = free atm. lapse rate
     6 = horizontal wind speed
     7 = vertical windspeed
+    8 - vertical wind shear
 
 '''
+feature_names = ['virtual_potential_temperature', 'inversion_layer_height', 'inversion_layer_thickness', 'inversion_layer_strength', 'lapse_rate', 'wind_speed_horizontal', 'wind_speed_vertical', 'vertical wind shear']
+feature_names_prods = np.empty(0)
+for i in range(8):
+    for j in range(i+1, 8):
+        feature_names_prods = np.append(feature_names_prods, feature_names[i] + ' x ' + feature_names[j])
 
-df = pd.DataFrame({
-    'virtual_potential_temperature': load_data[:,1],
-    'wind_speed_horizontal':  load_data[:,6],
-    'wind_speed_vertical':  load_data[:,7],
-    'gravity_wave':load_data[:,0],
-    'inversion_layer_height': load_data[:,2],
-    'inversion_layer_strength': load_data[:,4],
-    'lapse_rate': load_data[:,5],
-    'inversion_layer_thickness': load_data[:,3]
-})
+feature_names = np.append(feature_names, feature_names_prods)
+
+#data_combined = np.concatenate((np.array([feature_names]), load_data), axis=0)
+
+# df = pd.DataFrame({
+#     'virtual_potential_temperature': load_data[:,1],
+#     'wind_speed_horizontal':  load_data[:,6],
+#     'wind_speed_vertical':  load_data[:,7],
+#     'gravity_wave':load_data[:,0],
+#     'inversion_layer_height': load_data[:,2],
+#     'inversion_layer_strength': load_data[:,4],
+#     'lapse_rate': load_data[:,5],
+#     'inversion_layer_thickness': load_data[:,3]
+# })
+
+df = pd.DataFrame.from_records(load_data, columns = np.insert(feature_names, 0, 'gravity_wave'))
 
 
 
-X = df[['virtual_potential_temperature', 'wind_speed_horizontal',
-        'wind_speed_vertical', 'inversion_layer_height',
-        'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness']].values
+X = df[feature_names].values
 print(X)
 y = df['gravity_wave'].values
 
@@ -67,17 +84,15 @@ Both manual and automatic fitting were tried. Uncomment respective code to try
 
 #automatic fitting
 
-gam = LogisticGAM( s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) )
+gam = LogisticGAM(s((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37)))
 gam.gridsearch(X, y)
 
 # Plot the effect of each condition
-fig=plt.figure(figsize=(10,7))
-rows = 3
-columns = 3
+fig=plt.figure(figsize=(30, 30))
+rows = 6
+columns = 6
 
-feature_names = ['virtual_potential_temperature', 'wind_speed_horizontal',
-                 'wind_speed_vertical', 'inversion_layer_height',
-                 'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness']
+
 
 # Plot each smooth function
 for i, feature in enumerate(feature_names):
@@ -88,6 +103,7 @@ for i, feature in enumerate(feature_names):
     probability = 1 / (1 + np.exp(-probability))  # Convert to probability using sigmoid function (chat said this could be a reason)
 
     plt.plot(x_grid[:, i], probability)  # Plot probability curve
+    plt.plot([1, 1], [2, 2])
     plt.title(f'Effect of {feature}')
     plt.xlabel(feature)
     plt.ylabel('Probability of Gravity Wave')
