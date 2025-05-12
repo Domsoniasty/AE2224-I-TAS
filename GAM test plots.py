@@ -57,6 +57,7 @@ feature_names = np.append(feature_names, feature_names_prods)
 #     'inversion_layer_thickness': load_data[:,3]
 # })
 
+df = pd.DataFrame.from_records(load_data, columns = np.insert(feature_names, 0, 'gravity_wave'))
 
 
 
@@ -77,9 +78,9 @@ Both manual and automatic fitting were tried. Uncomment respective code to try
 
 #manual fitting
 #logisticGam
-gam = (LogisticGAM(
-    s(0,lam=10, n_splines=7) + s(1,lam=10, n_splines=7) + s(2,lam=10, n_splines=7) + s(3,lam=10, n_splines=7) + s(4,lam=10, n_splines=7) + s(5,lam=10, n_splines=7) + s(6,lam=10, n_splines=7) + s(7,lam=10, n_splines=7)).fit(X,y))
-
+#gam = (LogisticGAM(
+#    s(0,lam=10, n_splines=7) + s(1,lam=10, n_splines=7) + s(2,lam=10, n_splines=7) + s(3,lam=10, n_splines=7) + s(4,lam=10, n_splines=7) + s(5,lam=10, n_splines=7) + s(6,lam=10, n_splines=7) + s(7,lam=10, n_splines=7)).fit(X,y))
+gam = LogisticGAM().fit(X,y)
 gam.summary()
 #LinearGam
 '''
