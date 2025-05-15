@@ -1,4 +1,4 @@
-from pygam import LogisticGAM, s, LinearGAM, GAM
+from pygam import LogisticGAM, s
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,6 +12,14 @@ import matplotlib.pyplot as plt
 file = open('data_exported.npy', 'rb')
 load_data = np.load(file)
 file.close()
+
+data_products = np.empty([60, 0])
+
+for i in range(1, 9):
+    for j in range(i+1, 9):
+        data_products = np.append(data_products, np.reshape(load_data[:, i] * load_data[:, j], [60, 1]), axis=1)
+
+load_data = np.append(load_data, data_products, axis=1)
 
 
 # Load data here - Different index for different data
@@ -30,27 +38,31 @@ file.close()
     8 = vertical wind shear
 
 '''
+feature_names = ['virtual_potential_temperature', 'inversion_layer_height', 'inversion_layer_thickness', 'inversion_layer_strength', 'lapse_rate', 'wind_speed_horizontal', 'wind_speed_vertical', 'vertical wind shear']
+feature_names_prods = np.empty(0)
+for i in range(8):
+    for j in range(i+1, 8):
+        feature_names_prods = np.append(feature_names_prods, feature_names[i] + ' x ' + feature_names[j])
 
-print(load_data)
+feature_names = np.append(feature_names, feature_names_prods)
 
-df = pd.DataFrame({
-    'virtual_potential_temperature': load_data[:,1],
-    'wind_speed_horizontal':  load_data[:,6],
-    'wind_speed_vertical':  load_data[:,7],
-    'gravity_wave':load_data[:,0],
-    'inversion_layer_height': load_data[:,2],
-    'inversion_layer_strength': load_data[:,4],
-    'lapse_rate': load_data[:,5],
-    'inversion_layer_thickness': load_data[:,3],
-    'vertical_wind_shear': load_data[:,8]
-})
+# df = pd.DataFrame({
+#     'virtual_potential_temperature': load_data[:,1],
+#     'wind_speed_horizontal':  load_data[:,6],
+#     'wind_speed_vertical':  load_data[:,7],
+#     'gravity_wave':load_data[:,0],
+#     'inversion_layer_height': load_data[:,2],
+#     'inversion_layer_strength': load_data[:,4],
+#     'lapse_rate': load_data[:,5],
+#     'inversion_layer_thickness': load_data[:,3]
+# })
+
+df = pd.DataFrame.from_records(load_data, columns = np.insert(feature_names, 0, 'gravity_wave'))
 
 
 
-X = df[['virtual_potential_temperature', 'wind_speed_horizontal',
-        'wind_speed_vertical', 'inversion_layer_height',
-        'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness','vertical_wind_shear']].values
 
+X = df[feature_names].values
 print(X)
 y = df['gravity_wave'].values
 
@@ -66,9 +78,9 @@ Both manual and automatic fitting were tried. Uncomment respective code to try
 
 #manual fitting
 #logisticGam
-gam = (LogisticGAM(
-    s(0,lam=10, n_splines=7) + s(1,lam=10, n_splines=7) + s(2,lam=10, n_splines=7) + s(3,lam=10, n_splines=7) + s(4,lam=10, n_splines=7) + s(5,lam=10, n_splines=7) + s(6,lam=10, n_splines=7) + s(7,lam=10, n_splines=7)).fit(X,y))
-
+#gam = (LogisticGAM(
+#    s(0,lam=10, n_splines=7) + s(1,lam=10, n_splines=7) + s(2,lam=10, n_splines=7) + s(3,lam=10, n_splines=7) + s(4,lam=10, n_splines=7) + s(5,lam=10, n_splines=7) + s(6,lam=10, n_splines=7) + s(7,lam=10, n_splines=7)).fit(X,y))
+gam = LogisticGAM().fit(X,y)
 gam.summary()
 #LinearGam
 '''
@@ -78,17 +90,14 @@ gam.summary()
 
 #automatic fitting
 
-#gam = LogisticGAM( s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) + s(7) )
-#gam.gridsearch(X, y)
+# gam = LogisticGAM( s(0) + s(1) + s(2) + s(3) + s(4) + s(5) + s(6) )
+# gam.gridsearch(X, y)
 
 # Plot the effect of each condition
-fig=plt.figure(figsize=(10,8))
-rows = 3
-columns = 3
+fig=plt.figure(figsize=(30, 30))
+rows = 6
+columns = 6
 
-feature_names = ['virtual_potential_temperature', 'wind_speed_horizontal',
-                 'wind_speed_vertical', 'inversion_layer_height',
-                 'inversion_layer_strength', 'lapse_rate', 'inversion_layer_thickness', 'vertical_wind_shear']
 
 # Plot each smooth function
 for i, feature in enumerate(feature_names):
